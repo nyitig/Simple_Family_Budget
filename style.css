@@ -24,12 +24,13 @@
     align-items: center;
 }
 #body {
-    width: 10vw;
+    width: 100vw;
     height: 100vh;
     background: hsla(33, 100%, 53%, 1);
     background: linear-gradient(315deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
     background: -moz-linear-gradient(315deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
     background: -webkit-linear-gradient(315deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    overflow: hidden;
 }
 .btn {
     margin: 3rem;
@@ -43,6 +44,15 @@
     background: -moz-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
     background: -webkit-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
     box-shadow: 1px 15px 50px rgba(0, 0, 0, 0.85);
+}
+/* Header Style */
+
+#header {
+    width: 95%;
+    height: 8rem;
+    margin: 0 auto;
+    padding: 1rem 0;
+    border-bottom: 3px solid rgb(67, 35, 113);
 }
 /* Home Page Styles */
 

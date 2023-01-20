@@ -1,0 +1,7 @@
+Sziasztok,
+A család költségvetését szeretném vezetni webes felületen.
+Ahol mondjuk 2-3 családtagot hozzátudok adni, nem kell túl bonyolítani.
+Egyszerű kiadás/ bevétel vezetés lenne a fő cél.
+Azon kívűl, hogy vezetem Excel táblázatban van egyéb más módja vagy létező weboldal az ilyenre?
+Esetleg ha nem mennyire bonyolúlt, merre induljak el?
+Nyílván megoldható tudom, hogy sqlbe kézzel viszem be az adatokat, de tegyük fel, hogy anyukám nem ért hozzá ezért csak login kiválasztja a boltot be írja az összeget mentés.
