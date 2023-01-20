@@ -89,6 +89,7 @@
     border-radius: 10px;
 }
 .loginSpan {
+    width: 18rem;
     position: relative;
     top: -3.5rem;
     left: 2.5rem;
@@ -104,10 +105,13 @@
     font-size: 0.67rem;
     padding: 0 10px;
     background: #fafafa;
+    border: 1px solid rgb(67,35,113);
+    border-radius: 5px;
+    /* border-top: 1px solid rgb(67,35,113);
     border-left: 1px solid rgb(67,35,113);
-    border-right: 1px solid rgb(67,35,113);
+    border-right: 1px solid rgb(67,35,113); */
     letter-spacing: 0.1rem;
-    width: 15rem;
+    
 }
 
 .inputBox input:valid,
