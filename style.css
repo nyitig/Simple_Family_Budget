@@ -1,0 +1,124 @@
+@font-face {
+    font-family: MerriweatherRegular;
+    src: url(/assets/Merriweather-Regular.ttf);
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: MerriweatherRegular, Arial, Helvetica, sans-serif;
+    transition: all 0.6s ease-in-out;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+}
+.column {
+    display: flex;
+    flex-direction: column;
+}
+.justyContCent {
+    justify-content: center;
+}
+.aligItCent {
+    align-items: center;
+}
+#body {
+    width: 10vw;
+    height: 100vh;
+    background: hsla(33, 100%, 53%, 1);
+    background: linear-gradient(315deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -moz-linear-gradient(315deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -webkit-linear-gradient(315deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+}
+.btn {
+    margin: 3rem;
+    padding: 1em;
+    font-size: 2rem;
+    border-radius: 10px;
+    border: 3px solid #432371;
+    cursor: pointer;
+    background: hsla(33, 100%, 53%, 1);
+    background: linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -moz-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -webkit-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    box-shadow: 1px 15px 50px rgba(0, 0, 0, 0.85);
+}
+/* Home Page Styles */
+
+#homePage {
+    width: 100vw;
+    height: 100vh;
+}
+#headHP {
+    width: 98%;
+    margin: 1rem;
+    padding: 1em;
+    border-radius: 10px;
+    border: 2px solid #432371;
+}
+#headHP h2 {
+    text-align: center;
+}
+#mainHP {
+    width: 98%;
+    margin: 3rem;
+    padding: 1rem;
+}
+#mainHP h3 {
+    text-align: center;
+}
+#loginForm {
+    width: 90vw;
+    max-width: 46rem;
+    margin: 2rem;
+    padding: 2rem;
+    border-radius: 10px;
+    border: 3px solid #432371;
+    background: hsla(33, 100%, 53%, 1);
+    background: linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -moz-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -webkit-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    box-shadow: 1px 15px 50px rgba(0, 0, 0, 0.85);
+}
+.loginInputs {
+    margin: 1em;
+    padding: 1em;
+    font-size: 1.1rem;
+    border: 2px solid rgb(67, 35, 113);
+    border-radius: 10px;
+}
+.loginSpan {
+    position: relative;
+    top: -3.5rem;
+    left: 2.5rem;
+    font-size: 1.1rem;
+    color: rgba(0, 0, 0, 0.55);
+    transform: translateX(0rem) translateY(0px);
+}
+.inputBox input:valid ~ span,
+.inputBox input:focus ~ span
+{
+    color: rgb(67,35,113);
+    transform: translateX(1rem) translateY(-26px);
+    font-size: 0.67rem;
+    padding: 0 10px;
+    background: #fafafa;
+    border-left: 1px solid rgb(67,35,113);
+    border-right: 1px solid rgb(67,35,113);
+    letter-spacing: 0.1rem;
+    width: 15rem;
+}
+
+.inputBox input:valid,
+.inputBox input:focus {
+ border: 1px solid rgb(67, 35, 113);
+}
+
+.inputBox:nth-child(2) input:valid ~ span,
+.inputBox:nth-child(2) input:focus ~ span {
+    background: linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -moz-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -webkit-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    color: rgb(67, 35, 113);
+}
