@@ -17,6 +17,23 @@ loginBtn.addEventListener('click', (event)=> {
     event.preventDefault();
     fetch("/json/./user.json")
     .then(response => {
+        
+        if (!response.ok) {
+            console.log("Status: "+response.status)
+            console.log("StatusText: "+response.statusText)
+            if (response.status==404) {
+                loginNameInp.value=""
+                loginPasswInp.value=""
+                const loginINpSpan=document.getElementById('loginINpSpan')
+                loginINpSpan.style.color="red"
+                loginINpSpan.innerHTML="Nincs meg a fájl!"
+                setTimeout(() => {
+                    loginINpSpan.innerHTML="Felhasználónév"
+                    loginINpSpan.removeAttribute("style")
+                }, 3000);
+            }
+            throw new Error('Network response was not OK');
+          }
         return response.json();
     })
     .then(jsondata => {
@@ -26,9 +43,16 @@ loginBtn.addEventListener('click', (event)=> {
             if (jsondata.users[i].name==loginName) {
                 if (jsondata.users[i].password==password) {
                     isTrue=true
-                    console.log("Talált!")
+                    localStorage.setItem("user",jsondata.users[i].name)
+                    if (jsondata.users[i].name=="admin") {
+                        // store users.json
+                        let jsonTemp=JSON.stringify(jsondata.users)
+                        localStorage.setItem("users",jsonTemp)
+                    }
                     loginNameInp.value=""
                     loginPasswInp.value=""
+                    if (loginName=="admin") {openAdminDashboard()  }
+                    else (openUsersDasboard())
                 }
             }
         }
@@ -48,6 +72,10 @@ loginBtn.addEventListener('click', (event)=> {
 })
 
 
-
-
+function openAdminDashboard() {
+    console.log("Az admin lépett be")
+}
+function openUsersDasboard() {
+    console.log(loginName+" lépett be")
+}
 
