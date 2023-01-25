@@ -9,6 +9,9 @@
     font-family: MerriweatherRegular, Arial, Helvetica, sans-serif;
     transition: all 0.6s ease-in-out;
 }
+.hide {
+    display: none;
+}
 .row {
     display: flex;
     flex-direction: row;
@@ -20,8 +23,23 @@
 .justyContCent {
     justify-content: center;
 }
+.jusySpBtw {
+    justify-content: space-between;
+}
 .aligItCent {
     align-items: center;
+}
+.marginTop {
+    margin-top: 2rem;
+}
+.marginLeft {
+    margin-left: 2rem;
+}
+.marginRight {
+    margin-right: 2rem;
+}
+.marginRightH3 {
+    margin-right: 11rem;
 }
 #body {
     width: 100vw;
@@ -45,9 +63,29 @@
     background: -webkit-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
     box-shadow: 1px 15px 50px rgba(0, 0, 0, 0.85);
 }
+.mainAside {
+    width: 33%;    
+    margin: 1rem;
+    padding: 1em;
+    border-radius: 10px;
+    border: 2px solid #432371;
+}
+.mainArticle {
+    width: 67%;
+    margin: 1rem;
+    padding: 1em;
+    border-radius: 10px;
+    border: 2px solid #432371;
+}
+.mainCont {
+    width: 95%;
+    min-height: 74vh;
+    margin: 0 auto;
+    padding: 1rem 0;
+}
 /* Header Style */
 
-#header {
+#header, #adminHeader {
     width: 95%;
     height: 8rem;
     margin: 0 auto;
@@ -57,9 +95,16 @@
 /* Home Page Styles */
 
 #homePage {
+    transform: translateY(900px);
+    opacity: 0;
     width: 100vw;
     height: 100vh;
 }
+#homePage.active {
+    transform: translateY(0px);
+    opacity: 1;
+}
+
 #headHP {
     width: 98%;
     margin: 1rem;
@@ -135,4 +180,30 @@
     background: -moz-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
     background: -webkit-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
     color: rgb(67, 35, 113);
+}
+
+/* Admin Section styles */
+
+#adminDashboard {
+    transform: translateY(900px);
+    opacity: 0;
+}
+#adminDashboard.active {
+    transform: translateY(0px);
+    opacity: 1;
+}
+
+.itemsBtn {
+    padding: 0.8em;
+    border-radius: 10px;
+    border: 3px solid #432371;
+    cursor: pointer;
+    background: hsla(33, 100%, 53%, 1);
+    background: linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -moz-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -webkit-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    box-shadow: 1px 15px 50px rgba(0, 0, 0, 0.85);
+}
+.cent {
+    margin: 0 1rem;
 }

@@ -71,11 +71,47 @@ loginBtn.addEventListener('click', (event)=> {
         );
 })
 
+// Login
+const homePage=document.getElementById('homePage')
+const usersDashboard=document.getElementById('usersDashboard')
+const adminDashboard=document.getElementById('adminDashboard')
 
 function openAdminDashboard() {
-    console.log("Az admin lépett be")
+    homePage.classList.toggle('active')
+    setTimeout(() => {
+        homePage.classList.remove('column')
+        homePage.classList.add('hide')
+        setTimeout(() => {
+            adminDashboard.classList.toggle('active')
+        }, 10);
+    }, 600);    
 }
 function openUsersDasboard() {
+    homePage.classList.toggle('active')
+    setTimeout(() => {
+        homePage.classList.remove('column')
+        homePage.classList.add('hide')
+        setTimeout(() => {
+            usersDashboard.classList.toggle('active')
+        }, 10);
+    }, 600);
     console.log(loginName+" lépett be")
 }
-
+// Logout
+const logoutBtn =document.querySelectorAll('.logoutBtn')
+const dashboards=document.querySelectorAll("[data-sect]")
+for (let i = 0; i < logoutBtn.length; i++) {
+    logoutBtn[i].addEventListener("click",()=>{
+        dashboards[i].classList.toggle('active')
+        setTimeout(() => {
+            homePage.classList.remove('hide')
+            setTimeout(() => {
+                homePage.classList.add('column')
+                homePage.classList.add('active')
+            }, 10);
+        }, 600);
+        localStorage.removeItem('user')
+        localStorage.removeItem('users')
+    })
+    
+}

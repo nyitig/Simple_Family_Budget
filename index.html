@@ -26,7 +26,7 @@
         <h2 id="headHPH2" class="">Egyszerű családi költségvetés</h2>
     </div>
 </section>
-<secion id="homePage" class="column aligItCent">
+<secion id="homePage" class="column aligItCent active">
 
     <main id="mainHP" class="column aligItCent">
         <h3 class="">
@@ -46,10 +46,32 @@
     </main>
 </secion>
 <!-- létrehozni a user ill az admin section-okat -->
-<section id="usersDashboard" class="">
+<section id="adminDashboard" class="" data-sect="dashboard">
+    <!-- Milyen funkciók kellenek?
+    - menu : logout
+    - user add, delete, edit
+    - shop add, delete, edit
+    - budget add, delete, edit
+    -->
+    <header id="adminHeader" class="row aligItCent jusySpBtw marginTop">
+        <div id="adminItemsCont" class="marginLeft">
+            <button class="itemsBtn">users</button>
+            <button class="itemsBtn cent">shops</button>
+            <button class="itemsBtn">budget</button>
+        </div>
+        <h3 class="marginRightH3">Helló Admin!</h3>
+        <button class="itemsBtn logoutBtn marginRight">Logout</button>
+    </header>
+    <div id="adminMainCont" class="row mainCont">
+        <aside id="adminMainAside" class="mainAside">
 
+        </aside>
+        <article id="adminMainArticle" class="mainArticle">
+
+        </article>
+    </div>
 </section>
-<section id="adminDashboard" class="">
+<section id="usersDashboard" class="" data-sect="dashboard">
 
 </section>
     <script src="app.js"></script>
