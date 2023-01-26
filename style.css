@@ -12,6 +12,9 @@
 .hide {
     display: none;
 }
+.widt95 {
+    width: 95%;
+}
 .row {
     display: flex;
     flex-direction: row;
@@ -25,6 +28,9 @@
 }
 .jusySpBtw {
     justify-content: space-between;
+}
+.justySpAr {
+    justify-content: space-around;
 }
 .aligItCent {
     align-items: center;
@@ -253,12 +259,41 @@ tr td:first-child {
 /* input sections styles */
 
 #inputSections {
-    transform: translateY(-600px);
+    display: block;
+    overflow: hidden;
+    width: 0px;
+    height: 0px;
+    margin: 0 auto;
+    transform: translateY(0px);
     opacity: 0;
-    z-index: 0;
+    z-index: 10;
 }
 #inputSections.active {
+    display: block;
+    width: 600px;
+    height: 600px;
+    margin: 0 auto;
+    border: 3px solid #432371;
+    border-radius: 10px;
+    box-shadow: 1px 15px 50px rgba(0, 0, 0, 0.85);
     z-index: 10;
     opacity: 1;
-    transform: translateY(0px);
+    transform: translateY(-750px);
+    background: hsla(33, 100%, 53%, 1);
+    background: linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -moz-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+    background: -webkit-linear-gradient(111deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%);
+}
+/* Add new user style */
+
+#newUserInpSectCont {
+    height: 100%;
+    margin: 0 auto;
+
+}
+.newInputs {
+    padding: 7px;
+    width: 20rem;
+    border: 2px solid #432371;
+    border-radius: 10px;
 }

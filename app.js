@@ -1,4 +1,5 @@
-// input Sections template
+// input Sections + template
+const inputSections=document.getElementById('inputSections')
 let inputSectionsTemplate=``
 // loginBtn click
 const loginBtn=document.getElementById('loginBtn')
@@ -219,5 +220,40 @@ function adminUserActionsSelected(arr,ind) {
 // add user 
 function addUser() {
     let usersArr=JSON.parse(localStorage.users)
+    inputSectionsTemplate=`
+    <div id="newUserInpSectCont" class="column aligItCent justySpAr widt95">
+        <h3 class="marginTop" >Felhasználó hozzáadása</h3>
+        <article class="column aligItCent inputsCont marginTop">
+            <label for="newUsername">Felhasználó neve:</label>
+            <input type="text" name="newUsername" id="newUserName" class="marginTop newInputs" >
+            <label for="newPassword" class="marginTop">Jelszava:</label>
+            <input type="text" name="newPassword" id="newPassword" class="marginTop newInputs">   
+        </article>
+        <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+            <button id="okBtn" class="itemsBtn ">Hozzáadás</button>
+            <button id="cancelBtn" class="itemsBtn ">Mégse</button>
+        </article>
+    </div>`
+    inputSections.innerHTML=inputSectionsTemplate
+    inputSections.classList.toggle('active')
+    const okBtn=document.getElementById('okBtn')
+    const cancelBtn=document.getElementById('cancelBtn')
+    const newUserName=document.getElementById('newUserName')
+    const newPassword=document.getElementById('newPassword')
+    // if click cancel button
+    cancelBtn.addEventListener("click",()=>{
+        inputSectionsClear()
+    })
+    // TODO input & "Hozzáad" btn click
+}
 
+// input Sections Clear
+
+function inputSectionsClear() {
+    inputSections.classList.toggle('active')
+    inputSectionsTemplate=``
+    setTimeout(() => {
+        inputSections.innerHTML=""
+        
+    }, 600);
 }
