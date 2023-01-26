@@ -1,3 +1,5 @@
+// input Sections template
+let inputSectionsTemplate=``
 // loginBtn click
 const loginBtn=document.getElementById('loginBtn')
 // login name input
@@ -112,6 +114,110 @@ for (let i = 0; i < logoutBtn.length; i++) {
         }, 600);
         localStorage.removeItem('user')
         localStorage.removeItem('users')
+        const adminMainAside=document.getElementById('adminMainAside')
+        if (adminMainAside.innerHTML!="") {
+            adminMainAside.classList.remove('active')
+            adminMainAside.innerHTML=""
+        }
     })
     
+}
+
+// dashboard buttons click
+
+const adminbtn=document.querySelectorAll('.adminbtn')
+
+adminbtn.forEach((item,ind,arr)=>{
+    arr[ind].addEventListener("click",()=>{
+        adminBtnSelect(arr,ind)
+    })
+})
+// TODO shop & budget functions 
+function adminBtnSelect(arr,ind) {
+    switch (ind) {
+        case 0:
+            console.log(arr[ind].innerHTML+" gomb megnyomva")
+            loadUserJson()
+            break;
+        case 1:
+            console.log(arr[ind].innerHTML+" gomb megnyomva")
+        // shop
+            break;
+        case 2:
+            console.log(arr[ind].innerHTML+" gomb megnyomva")
+        // budget
+            break;
+        default:
+            console.log("Hibás gomb megnyomva!")
+            break;
+    }
+}
+
+// load user.json into adminMainAside
+
+function loadUserJson() {
+     const adminMainAside=document.getElementById('adminMainAside')  
+    let usersArr=JSON.parse(localStorage.users)
+    let asideTemplate=`
+            <div id="asideFunct" class="row jusySpBtw">
+                <img src="/assets/icons/add-circle-outline.svg" alt="Új felhazsnáló hozzáadása" title="Új felhasználó hozzáadása" class="asideSvg " width="50" height="50">
+                <img src="/assets/icons/create-outline.svg" alt="Szerkesztés" title="Szerkesztés" class="asideSvg " width="50" height="50">
+                <img src="/assets/icons/trash-outline.svg" alt="Felhasználó eltávolítása" title="Felhasználó eltávolítása" class="asideSvg " width="50" height="50">
+
+            </div>
+            <table class="table">
+                <tr id="headTr" class="">
+                    <th>Név</th>
+                    <th>Jelszó</th>
+                </tr>`
+    usersArr.map((val,ind,arr)=>{
+        asideTemplate+=`
+        <tr>
+        <td class="td">${arr[ind].name}</td>
+        <td class="td">${arr[ind].password}</td>
+    </tr>
+        `
+    })
+    asideTemplate+=`</table>`
+    adminMainAside.innerHTML=asideTemplate
+    setTimeout(() => {
+        adminMainAside.classList.toggle('active')
+    }, 30);
+    const asideSvg=document.querySelectorAll('.asideSvg ')
+    asideSvg.forEach((val,ind,arr)=>{
+        arr[ind].addEventListener("click", () => {
+        adminUserActionsSelected(arr,ind)
+        })
+    })
+}
+
+// selected admin user functions
+
+function adminUserActionsSelected(arr,ind) {
+    switch (ind) {
+        case 0:
+            console.log(arr[ind].attributes.title.nodeValue+" gomb megnyomva")
+        addUser()
+            break;
+    
+        case 1:
+            console.log(arr[ind].attributes.title.nodeValue+" gomb megnyomva")
+
+            break;
+        case 2:
+            console.log(arr[ind].attributes.title.nodeValue+" gomb megnyomva")
+
+            break;
+        
+        default:
+            break;
+    }
+
+    
+}
+
+// add user 
+function addUser() {
+    let usersArr=JSON.parse(localStorage.users)
+
 }
