@@ -1,3 +1,11 @@
+// locaostorage create admin user if no user
+function localstorCheck() {
+    if (localStorage.users===undefined) {
+        let adminUser=[{"name":"admin", "password":"admin"}]
+        localStorage.setItem("users", JSON.stringify(adminUser))
+    }    
+}
+localstorCheck()
 // input Sections + template
 const inputSections=document.getElementById('inputSections')
 let inputSectionsTemplate=``
@@ -18,60 +26,35 @@ loginPasswInp.addEventListener("keyup",()=>{
 // Login button click
 loginBtn.addEventListener('click', (event)=> {
     event.preventDefault();
-    fetch("/json/./user.json")
-    .then(response => {
-        
-        if (!response.ok) {
-            console.log("Status: "+response.status)
-            console.log("StatusText: "+response.statusText)
-            if (response.status==404) {
+    let usersTemp=JSON.parse(localStorage.users)
+    let isTrue=false
+    // username and password verification
+    for (let i = 0; i < usersTemp.length; i++) {
+        if (usersTemp[i].name==loginName) {
+            if (usersTemp[i].password==password) {
+                isTrue=true
+                // store user name
+                localStorage.setItem("user",usersTemp[i].name)
                 loginNameInp.value=""
                 loginPasswInp.value=""
-                const loginINpSpan=document.getElementById('loginINpSpan')
-                loginINpSpan.style.color="red"
-                loginINpSpan.innerHTML="Nincs meg a fájl!"
-                setTimeout(() => {
-                    loginINpSpan.innerHTML="Felhasználónév"
-                    loginINpSpan.removeAttribute("style")
-                }, 3000);
-            }
-            throw new Error('Network response was not OK');
-          }
-        return response.json();
-    })
-    .then(jsondata => {
-        let isTrue=false
-        // username and password verification
-        for (let i = 0; i < jsondata.users.length; i++) {
-            if (jsondata.users[i].name==loginName) {
-                if (jsondata.users[i].password==password) {
-                    isTrue=true
-                    localStorage.setItem("user",jsondata.users[i].name)
-                    if (jsondata.users[i].name=="admin") {
-                        // store users.json
-                        let jsonTemp=JSON.stringify(jsondata.users)
-                        localStorage.setItem("users",jsonTemp)
-                    }
-                    loginNameInp.value=""
-                    loginPasswInp.value=""
-                    if (loginName=="admin") {openAdminDashboard()  }
-                    else (openUsersDasboard())
+                if (loginName=="admin") {openAdminDashboard()  }
+                else {
+                    openUsersDasboard()
                 }
             }
         }
-        if (isTrue==false) {
-            loginNameInp.value=""
-            loginPasswInp.value=""
-            const loginINpSpan=document.getElementById('loginINpSpan')
-            loginINpSpan.style.color="red"
-            loginINpSpan.innerHTML="Hibás felhasználónév, jelszó!"
-            setTimeout(() => {
-                loginINpSpan.innerHTML="Felhasználónév"
-                loginINpSpan.removeAttribute("style")
-            }, 3000);
-        }
     }
-        );
+    if (isTrue==false) {
+        loginNameInp.value=""
+        loginPasswInp.value=""
+        const loginINpSpan=document.getElementById('loginINpSpan')
+        loginINpSpan.style.color="red"
+        loginINpSpan.innerHTML="Hibás felhasználónév, jelszó!"
+        setTimeout(() => {
+            loginINpSpan.innerHTML="Felhasználónév"
+            loginINpSpan.removeAttribute("style")
+        }, 3000);
+    }
 })
 
 // Login
@@ -114,7 +97,6 @@ for (let i = 0; i < logoutBtn.length; i++) {
             }, 10);
         }, 600);
         localStorage.removeItem('user')
-        localStorage.removeItem('users')
         const adminMainAside=document.getElementById('adminMainAside')
         if (adminMainAside.innerHTML!="") {
             adminMainAside.classList.remove('active')
@@ -155,9 +137,10 @@ function adminBtnSelect(arr,ind) {
 }
 
 // load user.json into adminMainAside
+const adminMainAside=document.getElementById('adminMainAside')  
 
 function loadUserJson() {
-     const adminMainAside=document.getElementById('adminMainAside')  
+    console.log("loadUserJson megy")
     let usersArr=JSON.parse(localStorage.users)
     let asideTemplate=`
             <div id="asideFunct" class="row jusySpBtw">
@@ -219,7 +202,6 @@ function adminUserActionsSelected(arr,ind) {
 
 // add user 
 function addUser() {
-    let usersArr=JSON.parse(localStorage.users)
     inputSectionsTemplate=`
     <div id="newUserInpSectCont" class="column aligItCent justySpAr widt95">
         <h3 class="marginTop" >Felhasználó hozzáadása</h3>
@@ -240,11 +222,66 @@ function addUser() {
     const cancelBtn=document.getElementById('cancelBtn')
     const newUserName=document.getElementById('newUserName')
     const newPassword=document.getElementById('newPassword')
+    let newUsNm=""
+    let newUsPw=""
+    // typing new username
+    newUserName.addEventListener("keyup",()=>{
+        newUsNm=newUserName.value
+    })
+    // typing new user password
+    newPassword.addEventListener("keyup",()=>{
+        newUsPw=newPassword.value
+    })
     // if click cancel button
     cancelBtn.addEventListener("click",()=>{
         inputSectionsClear()
     })
-    // TODO input & "Hozzáad" btn click
+    // add new user btn click
+    okBtn.addEventListener("click",()=> {
+/*
+- le kell elenőrizni, h a beírt username létezik-e már. Ha igen, akkor hiba:
+        - users-t be kell olvasni, és ellenőrizni, h a beírt felhasználónév létezik-e
+- ha nem, akkor
+*/ 
+        let usersTemp=JSON.parse(localStorage.users)
+        isTrue=true
+        usersTemp.forEach((val,ind)=>{
+            if (usersTemp[ind].name==newUsNm) {
+                isTrue=false
+                newUserName.style.color="red"
+                newUserName.value="Válassz másik nevet!"
+                setTimeout(() => {
+                    newUserName.value=""
+                    newUserName.removeAttribute('style')
+                }, 3000);
+                return;
+            }
+            if (usersTemp[ind]!=newUsNm) {
+                if (newUsPw=="") {
+                    isTrue=false
+                    newPassword.style.color="red"
+                    newPassword.value="Add meg a jelszót!"
+                    setTimeout(() => {
+                        newPassword.value=""
+                        newPassword.removeAttribute('style')
+                    }, 3000);
+                    return;
+                }
+            }
+        })
+        if (isTrue) {
+            let newUsObj={"name":newUsNm, "password":newUsPw}
+            usersTemp.push(newUsObj)
+            localStorage.removeItem("users")
+            localStorage.setItem("users",JSON.stringify(usersTemp))
+            inputSections.classList.remove('active')
+            adminMainAsideClear()
+            loadUserJson()
+            setTimeout(() => {
+                inputSections.innerHTML=""
+            }, 3000);
+        }
+    })
 }
 
 // input Sections Clear
@@ -256,4 +293,11 @@ function inputSectionsClear() {
         inputSections.innerHTML=""
         
     }, 600);
+}
+
+// clear adminaAside
+
+function adminMainAsideClear() {
+    adminMainAside.classList.toggle('active')
+    adminMainAside.innerHTML=""
 }
