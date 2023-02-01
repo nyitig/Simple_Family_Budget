@@ -136,6 +136,8 @@ function adminBtnSelect(arr,ind) {
     }
 }
 
+// USER BUTTON & USER ACTIONS
+
 // load user.json into adminMainAside
 const adminMainAside=document.getElementById('adminMainAside')  
 
@@ -190,7 +192,7 @@ function adminUserActionsSelected(arr,ind) {
             break;
         case 2:
             console.log(arr[ind].attributes.title.nodeValue+" gomb megnyomva")
-
+        deleteUser()
             break;
         
         default:
@@ -238,12 +240,7 @@ function addUser() {
     })
     // add new user btn click
     okBtn.addEventListener("click",()=> {
-/*
-- le kell elenőrizni, h a beírt username létezik-e már. Ha igen, akkor hiba:
-        - users-t be kell olvasni, és ellenőrizni, h a beírt felhasználónév létezik-e
-- ha nem, akkor
-*/ 
-        let usersTemp=JSON.parse(localStorage.users)
+    let usersTemp=JSON.parse(localStorage.users)
         isTrue=true
         usersTemp.forEach((val,ind)=>{
             if (usersTemp[ind].name==newUsNm) {
@@ -279,10 +276,198 @@ function addUser() {
             loadUserJson()
             setTimeout(() => {
                 inputSections.innerHTML=""
-            }, 3000);
+            }, 50);
         }
     })
 }
+
+
+
+// delete user
+
+function deleteUser() {
+    /*
+
+    - törlés gomb esetén: leellenőrizni, h van-e kijelölve vki. 
+        -ha nincs: inputSectionsClear()
+        - ha van: - inputSection a köv article innerHtml-t létrehozni, zárni az első article-t
+                  - megnyitja a következő article-t ahol:
+                    - kiíja a kijelölt felhasználókat
+                    - kiírja, h ezek törlésre kerülnek
+                    - 3 gomb: törlés, vissza, mégse
+                        - mégse esetén: inputSectionsClear()
+                        - vissza esetén:    - ez az article "bezáródik" késleltetve törlődik az innerHtml-je
+                                            - az előző megnyílik
+                        - törlés esetén:    - ez az article "bezáródik" és késleltetve törlődik az innerHtml-je
+                                            - a következő article innerHtml létrehozása: a "" felhasználók törlésre kerültek + ok gomb
+                                            - majd megnyitása, 
+                                            - a kijelölt felhasználók törlése:  - létrehozni a localstorage-n az új user listát
+                                                                                - az aside innerhtm törlés, és az új userlitával egy újat létrehozni
+                                            - ha megnyomja az ok gombot: inputSectionsClear()
+                                            
+    */
+    /*
+        - betölteni a user tömböt egy változóba
+    - létrehozni az input section-t:
+        - táblázat, ahol egyenként, vagy az összeset (kivéve az admint) ki lehet jelölni
+        - gombok: törlés és mégsem
+    */ 
+
+   let deleteUsersTemp=JSON.parse(localStorage.users)
+   let deleteInSecTempl=`
+   <div id="deleteFstCont" class="column aligItCent justySpAr widt95 marginCent height100">
+   <h3 class="marginTop" >Felhasználók</h3>
+   <table class="table">
+       <tr id="headTr" class="">
+           <th><input type="checkbox" name="allChk" id="allChk" class="delchkbx"></th>
+           <th>Név</th>
+       </tr>
+   `
+   deleteUsersTemp.forEach((val,ind)=>{
+    if (deleteUsersTemp[ind].name!="admin") {
+        deleteInSecTempl+=`
+        <tr>
+        <td class="td"><input type="checkbox" name="" class="delchkbx"</td>
+        <td class="td">${deleteUsersTemp[ind].name}</td>
+    </tr>
+        `
+    }
+
+    console.log(deleteUsersTemp[ind].name)
+   })
+   deleteInSecTempl+=`        </table>
+    <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+        <button id="delBtn1st" class="itemsBtn ">Törlés</button>
+        <button id="cancelBtn1st" class="itemsBtn ">Mégse</button>
+    </article>
+    </div>
+    <div id="delete2ndCont" class="column aligItCent justySpAr widt95 marginCent height100"></div>
+    `
+    inputSections.innerHTML=deleteInSecTempl
+    inputSections.classList.add('active')
+
+    //    - mégsem gomb megnyitása esetén: inputSectionsClear()
+   const cancelBtn1st=document.getElementById('cancelBtn1st')
+   cancelBtn1st.addEventListener("click",()=>{
+    inputSectionsClear()
+   })
+
+//    össes kijelölése törlésre
+   const allChk=document.getElementById('allChk')
+   const delchkbx=document.querySelectorAll('.delchkbx')
+   const delBtn1st=document.getElementById('delBtn1st')
+   let chkind=[]
+   allChk.addEventListener("click",()=>{
+    if (allChk.checked) {
+        delchkbx.forEach((val,ind)=>{
+            delchkbx[ind].checked=true
+        })
+    }
+    if (!allChk.checked) {
+        delchkbx.forEach((val,ind)=>{
+            delchkbx[ind].checked=false
+        })
+    }
+   })
+
+    /*
+    - törlés gomb esetén: leellenőrizni, h van-e kijelölve vki. 
+    - a kijelölt nevek "összegyűjtése". Pontosabban csak az indexet gyűjtjük össze
+    */    
+
+   delBtn1st.addEventListener("click", ()=>{
+    chkind=[]
+    delchkbx.forEach((val,ind)=>{
+        // indexek összegyűjtése
+        if (delchkbx[ind].checked) {
+            if (ind!=0) {
+                chkind.push(ind)
+            }
+        }
+    })
+    if (chkind.length==0) {
+        //  -ha nincs senki kijelölve: inputSectionsClear()
+        inputSectionsClear()
+        return
+    }
+    if (chkind.length!=0) {
+        chkind.reverse()
+        const delete2ndCont=document.getElementById('delete2ndCont')
+        let del2ndTempl=`
+        <h3 class="marginTop">A következő felhasználók lesznek törölve:</h3>
+        <h3 class="">
+        `
+        chkind.forEach((ind)=>{
+            del2ndTempl+=`${deleteUsersTemp[ind].name},  `
+        })
+        del2ndTempl+=`
+        </h3>
+        <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+            <button id="delBtn2nd" class="itemsBtn ">Törlés</button>
+            <button id="retBtn2nd" class="itemsBtn ">Vissza</button>
+            <button id="cancelBtn2nd" class="itemsBtn ">Mégse</button>
+        </article>
+        `
+        delete2ndCont.innerHTML=del2ndTempl
+        const deleteFstCont=document.getElementById('deleteFstCont')
+        deleteFstCont.classList.remove('height100')
+        delete2ndCont.classList.add('active')
+        const cancelBtn2nd=document.getElementById('cancelBtn2nd')
+        // mégse gomb
+        cancelBtn2nd.addEventListener("click",()=>{
+            inputSectionsClear()
+        })
+        // vissza gomb
+        const retBtn2nd=document.getElementById('retBtn2nd')
+        retBtn2nd.addEventListener("click",()=>{
+            deleteFstCont.classList.add('height100')
+            delete2ndCont.classList.remove('active')
+            delete2ndCont.innerHTML=""
+        })
+        // törlés gomb
+        const delBtn2nd=document.getElementById('delBtn2nd')
+        delBtn2nd.addEventListener("click",()=>{
+            /*
+            Hogyan töröljük?
+            - indexek alapjá szedjük ki a neveket
+            2 tömb
+            */ 
+           let arr1=deleteUsersTemp
+           let arr2=[]
+           chkind.forEach((ind)=>{
+            let searchName=deleteUsersTemp[ind].name
+            for (let i = 0; i < arr1.length; i++) {
+                if (searchName!=arr1[i].name) {
+                    arr2.push(arr1[i])
+                }
+                
+            }
+            arr1=[]
+            arr1=[...arr2]
+            arr2=[]
+           })
+        localStorage.removeItem("users")
+        localStorage.setItem("users",JSON.stringify(arr1))
+        adminMainAsideClear()
+        loadUserJson()
+        inputSectionsClear()
+        })
+       }
+    
+    })
+
+}
+
+// clear adminaAside
+
+function adminMainAsideClear() {
+    adminMainAside.classList.toggle('active')
+    adminMainAside.innerHTML=""
+}
+
+
+// END OF USER BUTTON ACTIONS
+
 
 // input Sections Clear
 
@@ -295,9 +480,3 @@ function inputSectionsClear() {
     }, 600);
 }
 
-// clear adminaAside
-
-function adminMainAsideClear() {
-    adminMainAside.classList.toggle('active')
-    adminMainAside.innerHTML=""
-}
