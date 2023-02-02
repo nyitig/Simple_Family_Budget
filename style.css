@@ -53,6 +53,9 @@
 .marginCent {
     margin: 0 auto;
 }
+.textAlCent {
+    text-align: center;
+}
 #body {
     width: 100vw;
     height: 100vh;
@@ -309,19 +312,19 @@ tr td:first-child {
     height: 20px;
     width: 20px;
 }
-#deleteFstCont{
+#inputSectFstCont{
     opacity: 0;
     height: 0px;
 }
-#deleteFstCont.height100{
+#inputSectFstCont.height100{
     opacity: 1;
     height: 100%;
 }
-#delete2ndCont, #delete3rdCont {
+#inputSect2ndCont, #inputSect3rdCont {
     opacity: 0;
     height: 0px;
 }
-#delete2ndCont.active, #delete3rdCont.active {
+#inputSect2ndCont.active, #inputSect3rdCont.active {
     opacity: 1;
     height: 100%;
 }

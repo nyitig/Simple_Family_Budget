@@ -6,6 +6,39 @@ function localstorCheck() {
     }    
 }
 localstorCheck()
+// device check
+function deviceCheck() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    let isTrue=false
+    let isMobile = /iPhone|Android/i.test(navigator.userAgent);
+    console.log("isMobile: "+isMobile);
+
+    const isTablet = /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/.test(userAgent);
+         console.log("isTablet: "+isTablet)
+
+    if(isMobile) {
+        isTrue=true
+        console.log("Mobile")
+    }else if(isTablet){
+        isTrue=true
+        console.log("Tablet")
+    }
+    if (isTrue) {
+        const body=document.getElementById('body')
+        let wrongTemplate=`
+        <secion id="homePage" class="column aligItCent justyContCent active">
+            <h3 class="marginTop textAlCent">
+            Sajnos ez a program nem működik ezen az eszközön!
+            </h3>
+            <h3 class="marginTop textAlCent">
+            Csak asztali gépen működik, próbáld ki azon!
+            </h3>
+        </section>
+        `
+        body.innerHTML=wrongTemplate
+    }
+}
+deviceCheck()
 // input Sections + template
 const inputSections=document.getElementById('inputSections')
 let inputSectionsTemplate=``
@@ -119,7 +152,6 @@ adminbtn.forEach((item,ind,arr)=>{
 function adminBtnSelect(arr,ind) {
     switch (ind) {
         case 0:
-            console.log(arr[ind].innerHTML+" gomb megnyomva")
             loadUserJson()
             break;
         case 1:
@@ -182,16 +214,14 @@ function loadUserJson() {
 function adminUserActionsSelected(arr,ind) {
     switch (ind) {
         case 0:
-            console.log(arr[ind].attributes.title.nodeValue+" gomb megnyomva")
         addUser()
             break;
     
         case 1:
             console.log(arr[ind].attributes.title.nodeValue+" gomb megnyomva")
-
+        editUser()
             break;
         case 2:
-            console.log(arr[ind].attributes.title.nodeValue+" gomb megnyomva")
         deleteUser()
             break;
         
@@ -281,31 +311,101 @@ function addUser() {
     })
 }
 
+// edit user
+
+function editUser() {
+    console.log("edituser fut")
+    /*
+    -betöltjük a users a localhotból
+    - inputsect innerHtml template elkészítése, majd betöltése
+    - inputSect megjelenítése
+
+    */ 
+   let editUsersTemp=JSON.parse(localStorage.users)
+   let editUsersTempl=`
+   <div id="inputSectFstCont" class="column aligItCent justySpAr widt95 marginCent height100">
+   <h3 class="marginTop" >Felhasználók</h3>
+   <label for="users">
+   <table class="table">
+       <tr id="headTr" class="">
+           <th></th>
+           <th>Név</th>
+       </tr>
+   `
+   editUsersTemp.forEach((val,ind)=>{
+         editUsersTempl+=`
+        <tr>
+        <td class="td"><input type="radio" name="users" id="" class="radioBtn"></td>
+        <td class="td">${editUsersTemp[ind].name}</td>
+    </tr>
+        `
+   })
+   editUsersTempl+=`        </table>
+   </label>
+    <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+        <button id="editBtn1st" class="itemsBtn ">Szerkesztés</button>
+        <button id="cancelBtn1st" class="itemsBtn ">Mégse</button>
+    </article>
+    </div>
+    <div id="inputSect2ndCont" class="column aligItCent justySpAr widt95 marginCent height100"></div>
+   `
+  inputSections.innerHTML=editUsersTempl
+  inputSections.classList.add('active')
+  const cancelBtn1st=document.getElementById('cancelBtn1st')
+//   cancel btn click
+  cancelBtn1st.addEventListener("click",()=> {
+    inputSectionsClear()
+  })
+// edit btn click
+let editUserInd
+let editSecContTempl=``
+editBtn1st.addEventListener("click",()=>{
+    const radioBtn=document.querySelectorAll('.radioBtn')
+    let isTrue=false
+    radioBtn.forEach((val,ind)=>{
+        if (radioBtn[ind].checked) {
+            isTrue=true
+            editUserInd=ind
+        }
+    })
+    if (!isTrue) {
+        console.log(isTrue)
+        inputSectionsClear()
+    }
+    /*
+    Ha kijelöltünk vkit szerkeszteni, akkor:
+        - 2nd sect template létrehozása
+            - inputok: név és jelszó, kivéte admi, ahol csak jelszó
+        - 3 gomb: szerkeszt, vissza, mégse
+        - 
+    */ 
+    if (isTrue) {
+         if (editUserInd==0) {
+            // Ez az admin itt még meg kell csinálnod, h az első input az rejtett legyen és admin a value
+            editSecContTempl+=`
+            <h3 class="marginTop" >Felhasználó adatainak szerkesztése</h3>
+            <article class="column aligItCent inputsCont marginTop">
+                <label for="newUsername">Felhasználó neve:</label>
+                <input type="text" name="newUsername" id="newUserName" class="marginTop newInputs" >
+                <label for="newPassword" class="marginTop">Jelszava:</label>
+                <input type="text" name="newPassword" id="newPassword" class="marginTop newInputs">   
+            </article>
+            <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+                <button id="editBtn2nd" class="itemsBtn ">Szerkeszt</button>
+                <button id="retBtn2nd" class="itemsBtn ">Vissza</button>
+                <button id="cancelBtn2nd" class="itemsBtn ">Mégse</button>
+            </article>
+            `
+            // TODO innen folytasd!
+         }
+    }
+})
+}
 
 
 // delete user
 
 function deleteUser() {
-    /*
-
-    - törlés gomb esetén: leellenőrizni, h van-e kijelölve vki. 
-        -ha nincs: inputSectionsClear()
-        - ha van: - inputSection a köv article innerHtml-t létrehozni, zárni az első article-t
-                  - megnyitja a következő article-t ahol:
-                    - kiíja a kijelölt felhasználókat
-                    - kiírja, h ezek törlésre kerülnek
-                    - 3 gomb: törlés, vissza, mégse
-                        - mégse esetén: inputSectionsClear()
-                        - vissza esetén:    - ez az article "bezáródik" késleltetve törlődik az innerHtml-je
-                                            - az előző megnyílik
-                        - törlés esetén:    - ez az article "bezáródik" és késleltetve törlődik az innerHtml-je
-                                            - a következő article innerHtml létrehozása: a "" felhasználók törlésre kerültek + ok gomb
-                                            - majd megnyitása, 
-                                            - a kijelölt felhasználók törlése:  - létrehozni a localstorage-n az új user listát
-                                                                                - az aside innerhtm törlés, és az új userlitával egy újat létrehozni
-                                            - ha megnyomja az ok gombot: inputSectionsClear()
-                                            
-    */
     /*
         - betölteni a user tömböt egy változóba
     - létrehozni az input section-t:
@@ -315,7 +415,7 @@ function deleteUser() {
 
    let deleteUsersTemp=JSON.parse(localStorage.users)
    let deleteInSecTempl=`
-   <div id="deleteFstCont" class="column aligItCent justySpAr widt95 marginCent height100">
+   <div id="inputSectFstCont" class="column aligItCent justySpAr widt95 marginCent height100">
    <h3 class="marginTop" >Felhasználók</h3>
    <table class="table">
        <tr id="headTr" class="">
@@ -327,13 +427,11 @@ function deleteUser() {
     if (deleteUsersTemp[ind].name!="admin") {
         deleteInSecTempl+=`
         <tr>
-        <td class="td"><input type="checkbox" name="" class="delchkbx"</td>
+        <td class="td"><input type="checkbox" name="" class="delchkbx"></td>
         <td class="td">${deleteUsersTemp[ind].name}</td>
     </tr>
         `
     }
-
-    console.log(deleteUsersTemp[ind].name)
    })
    deleteInSecTempl+=`        </table>
     <article class="inputsButtonSect row jusySpBtw marginTop widt95">
@@ -341,7 +439,7 @@ function deleteUser() {
         <button id="cancelBtn1st" class="itemsBtn ">Mégse</button>
     </article>
     </div>
-    <div id="delete2ndCont" class="column aligItCent justySpAr widt95 marginCent height100"></div>
+    <div id="inputSect2ndCont" class="column aligItCent justySpAr widt95 marginCent height100"></div>
     `
     inputSections.innerHTML=deleteInSecTempl
     inputSections.classList.add('active')
@@ -390,9 +488,10 @@ function deleteUser() {
         inputSectionsClear()
         return
     }
+    //         - ha van: - inputSection a köv article innerHtml-t létrehozni, zárni az első article-t
+
     if (chkind.length!=0) {
-        chkind.reverse()
-        const delete2ndCont=document.getElementById('delete2ndCont')
+        const delete2ndCont=document.getElementById('inputSect2ndCont')
         let del2ndTempl=`
         <h3 class="marginTop">A következő felhasználók lesznek törölve:</h3>
         <h3 class="">
@@ -409,7 +508,7 @@ function deleteUser() {
         </article>
         `
         delete2ndCont.innerHTML=del2ndTempl
-        const deleteFstCont=document.getElementById('deleteFstCont')
+        const deleteFstCont=document.getElementById('inputSectFstCont')
         deleteFstCont.classList.remove('height100')
         delete2ndCont.classList.add('active')
         const cancelBtn2nd=document.getElementById('cancelBtn2nd')
@@ -425,13 +524,11 @@ function deleteUser() {
             delete2ndCont.innerHTML=""
         })
         // törlés gomb
+            // ha tényleg törölni akarjuk, akkor megfordítjuk a tömben található indexek sorrendjét, h
+            // ténylegesen azokat töröljük, akiket szeretnénk törölni
+            chkind.reverse()
         const delBtn2nd=document.getElementById('delBtn2nd')
         delBtn2nd.addEventListener("click",()=>{
-            /*
-            Hogyan töröljük?
-            - indexek alapjá szedjük ki a neveket
-            2 tömb
-            */ 
            let arr1=deleteUsersTemp
            let arr2=[]
            chkind.forEach((ind)=>{
@@ -476,7 +573,6 @@ function inputSectionsClear() {
     inputSectionsTemplate=``
     setTimeout(() => {
         inputSections.innerHTML=""
-        
     }, 600);
 }
 
