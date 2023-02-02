@@ -381,14 +381,13 @@ editBtn1st.addEventListener("click",()=>{
     */ 
     if (isTrue) {
          if (editUserInd==0) {
-            // Ez az admin itt még meg kell csinálnod, h az első input az rejtett legyen és admin a value
             editSecContTempl+=`
             <h3 class="marginTop" >Felhasználó adatainak szerkesztése</h3>
             <article class="column aligItCent inputsCont marginTop">
-                <label for="newUsername">Felhasználó neve:</label>
-                <input type="text" name="newUsername" id="newUserName" class="marginTop newInputs" >
+                <label for="newUsername">Felhasználó neve: ${editUsersTemp[editUserInd].name}</label>
+                <input type="hidden" name="newUsername" id="newUserName" class="marginTop newInputs" value="admin" >
                 <label for="newPassword" class="marginTop">Jelszava:</label>
-                <input type="text" name="newPassword" id="newPassword" class="marginTop newInputs">   
+                <input type="text" name="newPassword" id="newPassword" class="marginTop newInputs" value="${editUsersTemp[editUserInd].password}">   
             </article>
             <article class="inputsButtonSect row jusySpBtw marginTop widt95">
                 <button id="editBtn2nd" class="itemsBtn ">Szerkeszt</button>
@@ -396,8 +395,45 @@ editBtn1st.addEventListener("click",()=>{
                 <button id="cancelBtn2nd" class="itemsBtn ">Mégse</button>
             </article>
             `
-            // TODO innen folytasd!
          }
+         if (editUserInd!=0) {
+                        editSecContTempl+=`
+            <h3 class="marginTop" >Felhasználó adatainak szerkesztése</h3>
+            <article class="column aligItCent inputsCont marginTop">
+                <label for="newUsername">Felhasználó neve:</label>
+                <input type="text" name="newUsername" id="newUserName" class="marginTop newInputs" value="${editUsersTemp[editUserInd].name}" >
+                <label for="newPassword" class="marginTop">Jelszava:</label>
+                <input type="text" name="newPassword" id="newPassword" class="marginTop newInputs" value="${editUsersTemp[editUserInd].password}">   
+            </article>
+            <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+                <button id="editBtn2nd" class="itemsBtn ">Szerkeszt</button>
+                <button id="retBtn2nd" class="itemsBtn ">Vissza</button>
+                <button id="cancelBtn2nd" class="itemsBtn ">Mégse</button>
+            </article>
+            `
+         }
+         const inputSectFstCont=document.getElementById('inputSectFstCont')
+         const inputSect2ndCont=document.getElementById('inputSect2ndCont')
+         inputSect2ndCont.innerHTML=editSecContTempl
+        inputSectFstCont.classList.remove('height100')
+        inputSect2ndCont.classList.add('active')
+        // cancel btn click
+        const cancelBtn2nd=document.getElementById('cancelBtn2nd')
+        cancelBtn2nd.addEventListener("click",()=>{
+            inputSectionsClear()
+        })
+        // return btn click
+        const retBtn2nd=document.getElementById('retBtn2nd')
+        retBtn2nd.addEventListener("click",()=>{
+            inputSectFstCont.classList.add('height100')
+            inputSect2ndCont.classList.remove('active')
+            editSecContTempl=``
+            isTrue=false
+            editUserInd=""
+            inputSect2ndCont.innerHTML=""
+        })
+        // edit btn click
+        // TODO innen folytasd!
     }
 })
 }
