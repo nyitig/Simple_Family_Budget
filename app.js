@@ -348,6 +348,8 @@ function editUser() {
     </article>
     </div>
     <div id="inputSect2ndCont" class="column aligItCent justySpAr widt95 marginCent height100"></div>
+    <div id="inputSect3rdCont" class="column aligItCent justySpAr widt95 marginCent height100"></div>
+
    `
   inputSections.innerHTML=editUsersTempl
   inputSections.classList.add('active')
@@ -383,11 +385,12 @@ editBtn1st.addEventListener("click",()=>{
          if (editUserInd==0) {
             editSecContTempl+=`
             <h3 class="marginTop" >Felhasználó adatainak szerkesztése</h3>
+            <h3 class="marginTop" >A felhasználó neve: ${editUsersTemp[editUserInd].name}, jelszava: ${editUsersTemp[editUserInd].password}</h3>
             <article class="column aligItCent inputsCont marginTop">
                 <label for="newUsername">Felhasználó neve: ${editUsersTemp[editUserInd].name}</label>
-                <input type="hidden" name="newUsername" id="newUserName" class="marginTop newInputs" value="admin" >
+                <input type="hidden" name="newUsername" id="newInputUserName" class="marginTop newInputs editname" value="admin" >
                 <label for="newPassword" class="marginTop">Jelszava:</label>
-                <input type="text" name="newPassword" id="newPassword" class="marginTop newInputs" value="${editUsersTemp[editUserInd].password}">   
+                <input type="text" name="newPassword" id="newPassword" class="marginTop newInputs editpassw" value="${editUsersTemp[editUserInd].password}">   
             </article>
             <article class="inputsButtonSect row jusySpBtw marginTop widt95">
                 <button id="editBtn2nd" class="itemsBtn ">Szerkeszt</button>
@@ -399,9 +402,10 @@ editBtn1st.addEventListener("click",()=>{
          if (editUserInd!=0) {
                         editSecContTempl+=`
             <h3 class="marginTop" >Felhasználó adatainak szerkesztése</h3>
+            <h3 class="marginTop" >A felhasználó neve: ${editUsersTemp[editUserInd].name}, jelszava: ${editUsersTemp[editUserInd].password}</h3>
             <article class="column aligItCent inputsCont marginTop">
                 <label for="newUsername">Felhasználó neve:</label>
-                <input type="text" name="newUsername" id="newUserName" class="marginTop newInputs" value="${editUsersTemp[editUserInd].name}" >
+                <input type="text" name="newUsername" id="newInputUserName" class="marginTop newInputs editname" value="${editUsersTemp[editUserInd].name}" >
                 <label for="newPassword" class="marginTop">Jelszava:</label>
                 <input type="text" name="newPassword" id="newPassword" class="marginTop newInputs" value="${editUsersTemp[editUserInd].password}">   
             </article>
@@ -417,6 +421,22 @@ editBtn1st.addEventListener("click",()=>{
          inputSect2ndCont.innerHTML=editSecContTempl
         inputSectFstCont.classList.remove('height100')
         inputSect2ndCont.classList.add('active')
+        const newUsernameInput=document.getElementById('newInputUserName')
+        const newPassword=document.getElementById('newPassword')
+        const editBtn2nd=document.getElementById('editBtn2nd')
+        let newnameText=newUsernameInput.value
+        let newpasswText=newPassword.value
+        newUsernameInput.addEventListener("keyup",()=>{
+           newnameText=newUsernameInput.value
+           console.log(newnameText)
+       })
+       newPassword.addEventListener("keyup",()=>{
+           newpasswText=newPassword.value
+           console.log(newpasswText)
+       })
+        
+
+
         // cancel btn click
         const cancelBtn2nd=document.getElementById('cancelBtn2nd')
         cancelBtn2nd.addEventListener("click",()=>{
@@ -433,7 +453,78 @@ editBtn1st.addEventListener("click",()=>{
             inputSect2ndCont.innerHTML=""
         })
         // edit btn click
-        // TODO innen folytasd!
+        editBtn2nd.addEventListener("click",()=>{
+            isOK=true
+            // TODO: azt is kellene ellenőrizni, h az admint jelöltem-e ki
+            if (editUsersTemp[editUserInd].name=="admin") {
+                isOK=true
+            }
+            if (editUsersTemp[editUserInd].name!="admin") {
+                editUsersTemp.forEach((val,ind)=>{
+                    if (editUsersTemp[ind].name==newnameText) {
+                        isOK=false
+                    }
+                })
+            }
+
+            if (!isOK) {
+                newUsernameInput.value=`A ${newnameText} név már foglalt!`
+                newUsernameInput.style.color="red"
+                setTimeout(() => {
+                    newUsernameInput.value=editUsersTemp[editUserInd].name
+                    newUsernameInput.removeAttribute('style')
+                }, 2000);
+            }
+            if (isOK) {
+                            const  inputSect3rdCont=document.getElementById('inputSect3rdCont')
+            let inputSect3rdTempl=`
+            <h3 class="marginTop" >A kiválasztott felhasználó új adatai:</h3>
+            <h3 class="marginTop" >a korábbi felhasználó neve: ${editUsersTemp[editUserInd].name}, jelszava: ${editUsersTemp[editUserInd].password}</h3>
+            <h3 class="marginTop" >Új neve: ${newnameText}, új jelszava: ${newpasswText}</h3>
+            <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+            <button id="editBtn3nd" class="itemsBtn ">Szerkeszt</button>
+            <button id="retBtn3nd" class="itemsBtn ">Vissza</button>
+            <button id="cancelBtn3nd" class="itemsBtn ">Mégse</button>
+        </article>
+        `
+        inputSect3rdCont.innerHTML=inputSect3rdTempl
+        inputSect3rdCont.classList.add('active')  
+        inputSect2ndCont.classList.remove('active')
+        const editBtn3nd=document.getElementById('editBtn3nd')
+        const retBtn3nd=document.getElementById('retBtn3nd')
+        const cancelBtn3nd=document.getElementById('cancelBtn3nd')
+        // cancel btn click
+        cancelBtn3nd.addEventListener("click",()=>{
+            inputSectionsClear()
+        })
+        // retbtn click
+        retBtn3nd.addEventListener("click",()=>{
+            inputSect3rdCont.classList.remove('active')  
+            inputSect2ndCont.classList.add('active')
+            inputSect3rdTempl=``
+            newnameText=""
+            newpasswText=""
+        })
+        // edit btn click
+        editBtn3nd.addEventListener("click",()=>{
+            let newusersJSONTemp=[]
+            editUsersTemp.forEach((val,ind)=>{
+                if (ind==editUserInd) {
+                    let cxhObj={"name":newnameText, "password":newpasswText,}
+                    newusersJSONTemp.push(cxhObj)
+                }
+                if (ind!=editUserInd) {
+                    newusersJSONTemp.push(editUsersTemp[ind])
+                }
+            })
+            localStorage.removeItem("users")
+            localStorage.setItem("users", JSON.stringify(newusersJSONTemp))
+            adminMainAsideClear()
+            loadUserJson()
+            inputSectionsClear()
+        })
+            }
+        })
     }
 })
 }
