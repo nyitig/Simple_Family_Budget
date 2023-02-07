@@ -11,10 +11,7 @@ function deviceCheck() {
     const userAgent = navigator.userAgent.toLowerCase();
     let isTrue=false
     let isMobile = /iPhone|Android/i.test(navigator.userAgent);
-    console.log("isMobile: "+isMobile);
-
     const isTablet = /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/.test(userAgent);
-         console.log("isTablet: "+isTablet)
 
     if(isMobile) {
         isTrue=true
@@ -196,8 +193,23 @@ function loadUserJson() {
     </tr>
         `
     })
-    asideTemplate+=`</table>`
+    asideTemplate+=`</table>
+    <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+    <button id="exportBtn" class="itemsBtn ">Export</button>
+    <button id="importBtn" class="itemsBtn ">Import</button>
+</article>
+    `
+
     adminMainAside.innerHTML=asideTemplate
+    const exportBtn=document.getElementById('exportBtn')
+    const importBtn=document.getElementById('importBtn')
+    exportBtn.addEventListener("click",()=>{
+        exportUsers()
+    })
+    importBtn.addEventListener("click",()=>{
+        importUsers()
+    })
+
     setTimeout(() => {
         adminMainAside.classList.toggle('active')
     }, 30);
@@ -207,6 +219,48 @@ function loadUserJson() {
         adminUserActionsSelected(arr,ind)
         })
     })
+}
+
+// export users to users.json
+
+function exportUsers() {
+    // innen folytasd!
+    let exportInpSectTempl=`
+    <div id="inputSectFstCont" class="column aligItCent justySpAr widt95 marginCent height100">
+        <h3 class="marginTop" >Felhasználók exportálása</h3>
+        <h3 class="marginTop" >Biztos, hogy exportálni akarod a felhasználókat?</h3>
+    <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+        <button id="exportOkBtn" class="itemsBtn ">Export</button>
+        <button id="cancelBtn" class="itemsBtn ">Mégsem</button>
+    </article>
+    </div>
+    `
+    inputSections.innerHTML=exportInpSectTempl
+    inputSections.classList.add('active')
+    const cancelBtn=document.getElementById('cancelBtn')
+    cancelBtn.addEventListener("click",()=>{
+        inputSectionsClear()
+    })
+    exportOkBtn.addEventListener("click",()=>{
+        exportUsersToJSON()
+    })
+
+}
+
+function exportUsersToJSON() {
+    debugger
+    let saveUsers=localStorage.getItem("users")
+    let file= new Blob([saveUsers], {type:'application/json'})
+    let atag=document.createElement("a")
+    atag.href=URL.createObjectURL(file)
+    atag.download="users.json"
+    atag.click()
+    inputSectionsClear()
+}
+
+// import users from .json
+function importUsers() {
+    // TODO innen folytasd!
 }
 
 // selected admin user functions
@@ -374,13 +428,6 @@ editBtn1st.addEventListener("click",()=>{
         console.log(isTrue)
         inputSectionsClear()
     }
-    /*
-    Ha kijelöltünk vkit szerkeszteni, akkor:
-        - 2nd sect template létrehozása
-            - inputok: név és jelszó, kivéte admi, ahol csak jelszó
-        - 3 gomb: szerkeszt, vissza, mégse
-        - 
-    */ 
     if (isTrue) {
          if (editUserInd==0) {
             editSecContTempl+=`
