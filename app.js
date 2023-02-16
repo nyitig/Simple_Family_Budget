@@ -260,8 +260,81 @@ function exportUsersToJSON() {
 
 // import users from .json
 function importUsers() {
-    // TODO innen folytasd!
+    let importUsersSecTempl=`
+    <div id="importUsersInpFrstSec" class="column aligItCent justySpAr widt95 height100 marginCent">
+        <h3 class="marginTop">Válaszd ki a fájlt!</h3>
+        <input type="file" name="usersJsonInp" id="usersJsonInp" accept="application/json" class="marginTop">
+        <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+            <button id="cancelBtn" class="itemsBtn ">Mégse</button>
+        </article>
+    </div>
+    `
+    inputSections.innerHTML=importUsersSecTempl
+    inputSections.classList.add('active')
+    const cancelBtn=document.getElementById('cancelBtn')
+    cancelBtn.addEventListener("click",()=>{
+        inputSectionsClear()
+    })
+    const okBtn=document.getElementById('okBtn')
+    const usersJsonInp=document.getElementById('usersJsonInp')
+    usersJsonInp.addEventListener("change",()=>{
+        let file = usersJsonInp.files[0]
+        let reader = new FileReader()
+        reader.onloadend=function () {
+            let load =JSON.parse(reader.result)
+           jsonCheck(load)
+        }
+        reader.readAsText(file)
+    })
+   
 }
+
+function jsonCheck(load) {
+    console.log(load)
+    let newArr=load
+    let newUsersName=[]
+    let newUsersPassw=[]
+    for (let i = 0; i < newArr.length; i++) {
+       newUsersName.push(newArr[i].name)
+       newUsersPassw.push(newArr[i].password)
+    }
+    if (newUsersName[0]==undefined || newUsersName==0) {
+        let importUsersSecTempl=`
+        <div id="importUsersInpSndSec" class="column aligItCent justySpAr widt95 height100 marginCent">
+        <h3 class="marginTop">Hibás fájl! Nem lehet betölteni!</h3>
+        <article class="inputsButtonSect column jusySpBtw marginTop widt95">
+            <button id="cancelBtn" class="itemsBtn ">OK</button>
+        </article>
+    </div>
+        `
+        inputSections.innerHTML=importUsersSecTempl
+        const cancelBtn=document.getElementById('cancelBtn')
+        cancelBtn.addEventListener("click",()=>{
+            inputSectionsClear()
+            return
+        })
+    }
+    if (newUsersName[0]!=undefined) {
+        // itt lehet, h kellene egy összehasonlító for cilkus, h akik már benne vannak, azokat ne írja felül. 
+        let importUsersSecTempl=`
+        <div id="importUsersInpSndSec" class="column aligItCent justySpAr widt95 height100 marginCent">
+        <h3 class="marginTop">Válaszd ki, hogy ki(e)t szeretnél áthozni!</h3>`
+        for (let i = 0; i < newUsersName.length; i++) {
+            
+            
+        }
+        importUsersSecTempl+=`
+        </table>
+        <article class="inputsButtonSect column jusySpBtw marginTop widt95">
+            <button id="cancelBtn" class="itemsBtn ">OK</button>
+        </article>
+    </div>
+        `
+        inputSections.innerHTML=importUsersSecTempl
+    }
+}
+
+
 
 // selected admin user functions
 
@@ -326,12 +399,14 @@ function addUser() {
     okBtn.addEventListener("click",()=> {
     let usersTemp=JSON.parse(localStorage.users)
         isTrue=true
+        console.log(newUsNm)
         usersTemp.forEach((val,ind)=>{
             if (usersTemp[ind].name==newUsNm) {
                 isTrue=false
                 newUserName.style.color="red"
                 newUserName.value="Válassz másik nevet!"
                 setTimeout(() => {
+                    newUsNm=""
                     newUserName.value=""
                     newUserName.removeAttribute('style')
                 }, 3000);
@@ -343,6 +418,7 @@ function addUser() {
                     newPassword.style.color="red"
                     newPassword.value="Add meg a jelszót!"
                     setTimeout(() => {
+                        newUsNm=""
                         newPassword.value=""
                         newPassword.removeAttribute('style')
                     }, 3000);
@@ -350,6 +426,16 @@ function addUser() {
                 }
             }
         })
+        if (newUsNm=="") {
+            isTrue=false
+            newUserName.style.color="red"
+            newUserName.value="Nem írtál be nevet!"
+            setTimeout(() => {
+                newUserName.value=""
+                newUserName.removeAttribute('style')
+            }, 3000);
+            return;
+        }
         if (isTrue) {
             let newUsObj={"name":newUsNm, "password":newUsPw}
             usersTemp.push(newUsObj)

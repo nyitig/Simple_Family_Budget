@@ -328,3 +328,8 @@ tr td:first-child {
     opacity: 1;
     height: 100%;
 }
+
+/* export new users.json style */
+#usersJsonInp {
+    font-size: 1.1rem;
+}
