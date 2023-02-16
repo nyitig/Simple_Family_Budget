@@ -248,7 +248,6 @@ function exportUsers() {
 }
 
 function exportUsersToJSON() {
-    debugger
     let saveUsers=localStorage.getItem("users")
     let file= new Blob([saveUsers], {type:'application/json'})
     let atag=document.createElement("a")
@@ -315,22 +314,70 @@ function jsonCheck(load) {
         })
     }
     if (newUsersName[0]!=undefined) {
+        let activeNames=JSON.parse(localStorage.users)
+        let indexTempArr=[]
         // itt lehet, h kellene egy összehasonlító for cilkus, h akik már benne vannak, azokat ne írja felül. 
+        for (let i = 0; i < newUsersName.length; i++) {
+            let nameok=newUsersName[i]
+            let ok=true
+            let z=0
+            do {
+
+                if (nameok==activeNames[z].name) {
+                    ok=false
+                }
+                if (ok && z==activeNames.length-1) {
+                    indexTempArr.push(i)
+                   
+                }
+                 z++
+                if (z==activeNames.length) {
+                    ok=false
+                }
+            } while (ok);
+
+        }
         let importUsersSecTempl=`
         <div id="importUsersInpSndSec" class="column aligItCent justySpAr widt95 height100 marginCent">
-        <h3 class="marginTop">Válaszd ki, hogy ki(e)t szeretnél áthozni!</h3>`
-        for (let i = 0; i < newUsersName.length; i++) {
-            
+        <h3 class="marginTop">Válaszd ki, hogy ki(e)t szeretnél áthozni!</h3>
+          
+        <table class="table">
+            <tr id="headTr" class="">
+                <th><input type="checkbox" name="usersAll" id="usersAllChkbx" class="chkbx"></th>
+                <th>Név</th>
+            </tr>
+        `
+        for (let i = 0; i < indexTempArr.length; i++) {
+            importUsersSecTempl+=`
+            <tr>
+                <td class="td"><input type="checkbox" name="users${i}" id="" class="chkbx"></td>
+                <td class="td">${newUsersName[indexTempArr[i]]}</td>
+            </tr>
+            `
             
         }
         importUsersSecTempl+=`
         </table>
-        <article class="inputsButtonSect column jusySpBtw marginTop widt95">
-            <button id="cancelBtn" class="itemsBtn ">OK</button>
+        <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+            <button id="oklBtn" class="itemsBtn ">OK</button>
+            <button id="cancelBtn" class="itemsBtn ">Mégsem</button>
+
         </article>
     </div>
         `
         inputSections.innerHTML=importUsersSecTempl
+        // cancel btn click
+        const cancelBtn=document.getElementById('cancelBtn')
+        cancelBtn.addEventListener("click", ()=> inputSectionsClear())
+        // select all chkbx
+        const usersAllChkbx=document.getElementById('usersAllChkbx')
+        const chkbx=document.querySelectorAll('.chkbx')
+        usersAllChkbx.addEventListener("click",()=>{
+            for (let i = 0; i < chkbx.length; i++) {
+                chkbx[i].checked=usersAllChkbx.checked
+            }
+        })
+        // Todo Innen folytasd!
     }
 }
 
