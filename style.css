@@ -56,6 +56,10 @@
 .textAlCent {
     text-align: center;
 }
+.colorRed {
+    font-weight: bolder;
+    color: red;
+}
 #body {
     width: 100vw;
     height: 100vh;

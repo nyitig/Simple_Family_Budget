@@ -1,3 +1,5 @@
+// indexTempArr
+let indexTempArr=[]
 // locaostorage create admin user if no user
 function localstorCheck() {
     if (localStorage.users===undefined) {
@@ -289,7 +291,6 @@ function importUsers() {
 }
 
 function jsonCheck(load) {
-    console.log(load)
     let newArr=load
     let newUsersName=[]
     let newUsersPassw=[]
@@ -315,7 +316,6 @@ function jsonCheck(load) {
     }
     if (newUsersName[0]!=undefined) {
         let activeNames=JSON.parse(localStorage.users)
-        let indexTempArr=[]
         // itt lehet, h kellene egy összehasonlító for cilkus, h akik már benne vannak, azokat ne írja felül. 
         for (let i = 0; i < newUsersName.length; i++) {
             let nameok=newUsersName[i]
@@ -358,6 +358,7 @@ function jsonCheck(load) {
         }
         importUsersSecTempl+=`
         </table>
+        <span id="messsage" class="colorRed"></span>
         <article class="inputsButtonSect row jusySpBtw marginTop widt95">
             <button id="oklBtn" class="itemsBtn ">OK</button>
             <button id="cancelBtn" class="itemsBtn ">Mégsem</button>
@@ -372,12 +373,45 @@ function jsonCheck(load) {
         // select all chkbx
         const usersAllChkbx=document.getElementById('usersAllChkbx')
         const chkbx=document.querySelectorAll('.chkbx')
+
         usersAllChkbx.addEventListener("click",()=>{
             for (let i = 0; i < chkbx.length; i++) {
                 chkbx[i].checked=usersAllChkbx.checked
             }
         })
-        // Todo Innen folytasd!
+        // okbtn click
+        const oklBtn=document.getElementById('oklBtn')
+        oklBtn.addEventListener('click',()=>{
+            let chkbxOk=false
+            for (let i = 0; i < chkbx.length; i++) {
+                if (chkbx[i].checked) {
+                    chkbxOk=true
+                }
+            }
+            if (!chkbxOk) {
+                const messsage=document.getElementById('messsage')
+                messsage.innerHTML="Nincs senki kijelőlve!"
+                setTimeout(() => {
+                    messsage.innerHTML=""
+                }, 2000);
+            }
+            if (chkbxOk) {
+               for (let i = 1; i < chkbx.length; i++) {
+                if (chkbx[i].checked) {
+                    let axa=indexTempArr[i-1]
+                    activeNames.push(newArr[axa])
+                }
+               }
+            //    users template create
+             localStorage.removeItem('users')
+             localStorage.setItem("users", JSON.stringify(activeNames))
+             adminMainAsideClear()
+             loadUserJson()
+             inputSectionsClear()
+             indexTempArr=[]
+            }
+        })
+
     }
 }
 
