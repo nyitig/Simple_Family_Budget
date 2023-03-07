@@ -5,9 +5,13 @@ function localstorCheck() {
     if (localStorage.users===undefined) {
         let adminUser=[{"name":"admin", "password":"admin"}]
         localStorage.setItem("users", JSON.stringify(adminUser))
-    }    
+    } 
+    if (localStorage.shops===undefined) {
+        let shopsArr=["Lidl","Aldi","Tesco","Penny","Reál","Spar","CBA"]
+        localStorage.setItem("shops",JSON.stringify(shopsArr))
+    }   
 }
-localstorCheck()
+
 // device check
 function deviceCheck() {
     const userAgent = navigator.userAgent.toLowerCase();
@@ -36,8 +40,15 @@ function deviceCheck() {
         `
         body.innerHTML=wrongTemplate
     }
+    if (!isTrue) {
+        localstorCheck()
+    }
 }
 deviceCheck()
+function loginData() {
+    // TODO Innen folytasd! Át kell alakítsd az eddig megírtakat, h minden funkcióra legyen szétszedve
+}
+
 // input Sections + template
 const inputSections=document.getElementById('inputSections')
 let inputSectionsTemplate=``
