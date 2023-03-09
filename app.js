@@ -42,14 +42,12 @@ function deviceCheck() {
     }
     if (!isTrue) {
         localstorCheck()
+        loginData()
     }
 }
 deviceCheck()
 function loginData() {
-    // TODO Innen folytasd! Át kell alakítsd az eddig megírtakat, h minden funkcióra legyen szétszedve
-}
-
-// input Sections + template
+  // input Sections + template
 const inputSections=document.getElementById('inputSections')
 let inputSectionsTemplate=``
 // loginBtn click
@@ -65,10 +63,13 @@ let password=""
 const loginPasswInp=document.getElementById('loginPasswInp')
 loginPasswInp.addEventListener("keyup",()=>{
     password=loginPasswInp.value
-})
+})  
+
 // Login button click
-loginBtn.addEventListener('click', (event)=> {
-    event.preventDefault();
+loginBtn.addEventListener("click", (event)=> {loginCheck(event,loginName,password)})
+}
+function loginCheck(event,loginName,password) {
+    event.preventDefault()
     let usersTemp=JSON.parse(localStorage.users)
     let isTrue=false
     // username and password verification
@@ -98,7 +99,9 @@ loginBtn.addEventListener('click', (event)=> {
             loginINpSpan.removeAttribute("style")
         }, 3000);
     }
-})
+}
+
+
 
 // Login
 const homePage=document.getElementById('homePage')
@@ -160,12 +163,36 @@ adminbtn.forEach((item,ind,arr)=>{
 })
 // TODO shop & budget functions 
 function adminBtnSelect(arr,ind) {
+    const adminMainAside=document.getElementById('adminMainAside')  
+    let activeTrue=false
+    if (adminMainAside.classList.contains('active')) {
+        activeTrue=true
+    }
+    if (activeTrue) {
+        setTimeout(() => {
+            adminMainAside.classList.toggle('active')
+            setTimeout(() => {
+                adminMainAside.innerHTML=""
+                setTimeout(() => {
+                    adminMenuSwitch(ind)
+                    
+                }, 20);
+            }, 400);
+        }, 30);
+    }
+    if (!activeTrue) {
+        adminMenuSwitch(ind)
+    }
+
+}
+function adminMenuSwitch(ind) {
     switch (ind) {
         case 0:
+
             loadUserJson()
             break;
         case 1:
-            console.log(arr[ind].innerHTML+" gomb megnyomva")
+           loadShops()
         // shop
             break;
         case 2:
@@ -177,14 +204,16 @@ function adminBtnSelect(arr,ind) {
             break;
     }
 }
-
 // USER BUTTON & USER ACTIONS
+
+// ADMIN FUNCTIONS
+
+// ADMIN USERS FUNCTIONS
 
 // load user.json into adminMainAside
 const adminMainAside=document.getElementById('adminMainAside')  
 
 function loadUserJson() {
-    console.log("loadUserJson megy")
     let usersArr=JSON.parse(localStorage.users)
     let asideTemplate=`
             <div id="asideFunct" class="row jusySpBtw">
@@ -426,18 +455,14 @@ function jsonCheck(load) {
     }
 }
 
-
-
 // selected admin user functions
 
 function adminUserActionsSelected(arr,ind) {
     switch (ind) {
         case 0:
         addUser()
-            break;
-    
+            break;    
         case 1:
-            console.log(arr[ind].attributes.title.nodeValue+" gomb megnyomva")
         editUser()
             break;
         case 2:
@@ -546,7 +571,6 @@ function addUser() {
 // edit user
 
 function editUser() {
-    console.log("edituser fut")
     /*
     -betöltjük a users a localhotból
     - inputsect innerHtml template elkészítése, majd betöltése
@@ -607,7 +631,11 @@ editBtn1st.addEventListener("click",()=>{
         inputSectionsClear()
     }
     if (isTrue) {
+        let originName=""
+        let originPassword=""
          if (editUserInd==0) {
+            originName= editUsersTemp[editUserInd].name
+            originPassword=editUsersTemp[editUserInd].password
             editSecContTempl+=`
             <h3 class="marginTop" >Felhasználó adatainak szerkesztése</h3>
             <h3 class="marginTop" >A felhasználó neve: ${editUsersTemp[editUserInd].name}, jelszava: ${editUsersTemp[editUserInd].password}</h3>
@@ -625,6 +653,8 @@ editBtn1st.addEventListener("click",()=>{
             `
          }
          if (editUserInd!=0) {
+            originName=editUsersTemp[editUserInd].name
+            originPassword=editUsersTemp[editUserInd].password
                         editSecContTempl+=`
             <h3 class="marginTop" >Felhasználó adatainak szerkesztése</h3>
             <h3 class="marginTop" >A felhasználó neve: ${editUsersTemp[editUserInd].name}, jelszava: ${editUsersTemp[editUserInd].password}</h3>
@@ -680,13 +710,14 @@ editBtn1st.addEventListener("click",()=>{
         // edit btn click
         editBtn2nd.addEventListener("click",()=>{
             isOK=true
+            debugger
             // TODO: azt is kellene ellenőrizni, h az admint jelöltem-e ki
             if (editUsersTemp[editUserInd].name=="admin") {
                 isOK=true
             }
             if (editUsersTemp[editUserInd].name!="admin") {
                 editUsersTemp.forEach((val,ind)=>{
-                    if (editUsersTemp[ind].name==newnameText) {
+                    if (editUsersTemp[ind].name==newnameText && newpasswText==originPassword ) {
                         isOK=false
                     }
                 })
@@ -913,6 +944,98 @@ function adminMainAsideClear() {
     adminMainAside.classList.toggle('active')
     adminMainAside.innerHTML=""
 }
+
+// END OF ADMIN USERS FUNCTIONS
+
+// ADMIN SHOPS FUNCTIONS
+
+// shops load function
+
+function loadShops() {
+    let shopsArr=JSON.parse(localStorage.shops)
+    let asideTemplate=`
+    <div id="asideFunct" class="row jusySpBtw">
+        <img src="/assets/icons/add-circle-outline.svg" alt="Új üzlet hozzáadása" title="Új üzlet hozzáadása" class="asideSvg " width="50" height="50">
+        <img src="/assets/icons/create-outline.svg" alt="Szerkesztés" title="Szerkesztés" class="asideSvg " width="50" height="50">
+        <img src="/assets/icons/trash-outline.svg" alt="Üzlet eltávolítása" title="üzlet eltávolítása" class="asideSvg " width="50" height="50">
+
+    </div>
+    <table class="table">
+        <tr id="headTr" class="">
+            <th>Üzlet neve</th> 
+        </tr>`
+        shopsArr.map((val,ind,arr)=>{
+            asideTemplate+=`
+            <tr>
+            <td class="td">${arr[ind]}</td>
+        </tr>
+            `
+        })
+        asideTemplate+=`</table>
+        <article class="inputsButtonSect row jusySpBtw marginTop widt95">
+        <button id="exportBtn" class="itemsBtn ">Export</button>
+        <button id="importBtn" class="itemsBtn ">Import</button>
+    </article>
+        `
+        adminMainAside.innerHTML=asideTemplate
+        setTimeout(() => {
+            adminMainAside.classList.toggle('active')
+        }, 30);
+        const asideSVG=document.querySelectorAll('.asideSvg')
+        const exportBtn=document.getElementById('exportBtn')
+        const importBtn=document.getElementById('importBtn')
+        asideSVG.forEach((val,ind,arr)=>{
+            asideSVG[ind].addEventListener("click",()=>{
+                shopsOperations(ind)
+            })
+        })
+        exportBtn.addEventListener("click",exportShops)
+        importBtn.addEventListener("click",importShops)
+
+}
+function shopsOperations(ind) {
+    switch (ind) {
+        case 0:
+        addShops()
+            break;    
+        case 1:
+        editShop()
+            break;
+        case 2:
+        deleteShops()
+            break;
+        
+        default:
+            break;
+    }
+}
+// add shops
+function addShops() {
+    console.log("Addshops")
+}
+
+// edit shop
+function editShop() {
+    console.log("editshops")
+}
+
+// delete shops
+function deleteShops() {
+    console.log("deleteshops")
+}
+
+// export shops
+function exportShops() {
+    console.log("exportShops")
+
+}
+// import shops
+function importShops() {
+    console.log("importShops")
+
+}
+
+
 
 
 // END OF USER BUTTON ACTIONS
